@@ -3,14 +3,19 @@ import socket
 import threading
 
 def server_loop(local_host, local_port, remote_host, remote_port, receive_first):
-    sever = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     try:
+        print("bind test\n")
+        print("local_host: %s\n" %(local_host))
+        print("locak_port: %d\n" %(local_port))
         server.bind((local_host, local_port))
     except:
         print("[!!] Failed to listen on %s:%d\n" % (local_host, local_port))
-        print("[!!] Check for other listening sockets or correct permissions\n")
+        print("[!!] Check for other listening sockets or correct permissions.\n")
         sys.exit(0)
+    
     print("[*] Listening on %s:%d\n" % (local_host, local_port))
 
     server.listen(5)
@@ -31,11 +36,11 @@ def main():
         sys.exit(0)
 
     # Setting localhost sniffing information
-    local_host = sys.argv[1]
+    local_host = str(sys.argv[1])
     local_port = int(sys.argv[2])
 
     # Setting remote host information
-    remote_host = sys.argv[3]
+    remote_host = str(sys.argv[3])
     remote_port = int(sys.argv[4])
 
     # let the proxy connect to remote host and receive data first
@@ -58,6 +63,7 @@ def proxy_handler(client_socket, remote_host, remote_port, receive_first):
 
     # If neccessary, receive data from remote host first
     if receive_first:
+        print("test")
         remote_buffer = receive_from(remote_socket)
         hexdump(remote_buffer)
 
@@ -145,7 +151,9 @@ def response_handler(buffer):
     # Do someting in here
     # modify packet / fuzzing / verify identification
     return buffer
-    
-if __name__== '__main()__':
-    main()
 
+
+#main()
+
+if __name__ == '__main__':
+    main()
